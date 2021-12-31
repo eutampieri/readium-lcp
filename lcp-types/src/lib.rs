@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub mod crypto;
 pub mod link;
 pub mod rights;
+pub mod user;
 
 #[derive(Serialize, Deserialize)]
 pub struct LicenseDocument {
