@@ -1,8 +1,11 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
-    }
+use serde::{Deserialize, Serialize};
+
+pub mod crypto;
+
+#[derive(Serialize, Deserialize)]
+pub struct LicenseDocument {
+    pub id: String,
+    pub issued: chrono::DateTime<chrono::Utc>,
+    pub provider: String,
+    pub updated: Option<chrono::DateTime<chrono::Utc>>,
 }
