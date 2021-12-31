@@ -40,6 +40,7 @@ impl TryFrom<&str> for EncryptionAlgorithm {
 
 }*/
 
+#[derive(Serialize, Deserialize)]
 pub struct Encryption {
     pub profile: String,
     /// The Content Key (encrypted using the User Key) is used to encrypt the Publication Resources

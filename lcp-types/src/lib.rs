@@ -13,4 +13,11 @@ pub struct LicenseDocument {
     pub provider: String,
     #[serde(default)]
     pub updated: Option<chrono::DateTime<chrono::Utc>>,
+    pub encryption: crypto::Encryption,
+    pub links: Vec<link::Link>,
+    #[serde(default)]
+    pub rights: Option<rights::Rights>,
+    #[serde(default)]
+    pub user: Option<user::User>,
+    pub signature: signature::Signature,
 }
