@@ -161,6 +161,7 @@ dependencies = [
 name = "lcpget"
 version = "0.1.0"
 dependencies = [
+ "lcp-types",
  "serde_json",
  "ureq",
  "zip",

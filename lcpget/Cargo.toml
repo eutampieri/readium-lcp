@@ -10,3 +10,4 @@ license = "MIT"
 serde_json = "1.0"
 ureq = "2"
 zip = "0.5"
+lcp-types = {path = "../lcp-types"}

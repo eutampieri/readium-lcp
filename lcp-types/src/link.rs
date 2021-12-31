@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(PartialEq)]
 pub enum LinkRelationship {
     /// Location where a Reading System can redirect a User looking for additional information about the User Passphrase. Required
     Hint,
@@ -9,6 +10,7 @@ pub enum LinkRelationship {
     Link,
     /// Support resources for the user (either a website, an email or a telephone number)
     Support,
+    Unknown(String),
 }
 
 impl From<&str> for LinkRelationship {
@@ -18,7 +20,7 @@ impl From<&str> for LinkRelationship {
             "publication" => Self::Publication,
             "self" => Self::Link,
             "support" => Self::Support,
-            _ => unimplemented!(),
+            _ => Self::Unknown(s.to_string()),
         }
     }
 }
