@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 pub trait Key {
     fn get_encrypted_value(&self) -> Vec<u8>;
     fn get_encryption_algorithm(&self) -> EncryptionAlgorithm;
@@ -45,6 +47,7 @@ pub struct Encryption {
     pub user_key: UserKey,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct ContentKey {
     encrypted_value: String,
     algorithm: String,
@@ -60,6 +63,7 @@ impl Key for ContentKey {
     }
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct UserKey {
     key_check: String,
     algorithm: String,
