@@ -30,13 +30,19 @@ impl From<&str> for LinkRelationship {
 pub struct Link {
     pub href: String,
     rel: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     /// Originally `type`
     pub mime_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub templated: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub profile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub length: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hash: Option<String>,
 }
 
