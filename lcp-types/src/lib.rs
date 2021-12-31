@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub mod crypto;
 pub mod link;
 pub mod rights;
+pub mod signature;
 pub mod user;
 
 #[derive(Serialize, Deserialize)]
