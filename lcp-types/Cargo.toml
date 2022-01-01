@@ -10,3 +10,6 @@ license = "MIT"
 serde = {version = "1", features = ["derive"]}
 chrono = {version = "0.4", features = ["serde"]}
 base64 = "0.13"
+des = "0.7"
+block-modes = "0.8"
+aes = "0.7"

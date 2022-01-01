@@ -6,7 +6,12 @@ pub extern "C" fn license_download_epub() {
 }
 
 pub fn license_to_epub(license_file: &str) -> Vec<u8> {
+    use lcp_types::crypto::Key;
     let license: LicenseDocument = serde_json::from_str(license_file).unwrap();
+    dbg!(license
+        .encryption
+        .content_key
+        .decrypt("538be5918e9c77f19370a25f02c0a1b4c186f606ef516386b20eb1b3decbff9d"));
     let epub_url = license
         .links
         .iter()

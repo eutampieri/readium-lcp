@@ -1,11 +1,17 @@
 use serde::{Deserialize, Serialize};
 
+mod tripledes;
+
 pub trait Key {
     fn get_encrypted_value(&self) -> Vec<u8>;
-    fn get_encryption_algorithm(&self) -> EncryptionAlgorithm;
+    fn get_encryption_algorithm(&self) -> Algorithm;
+    fn decrypt(&self, key: &str) -> Vec<u8> {
+        self.get_encryption_algorithm()
+            .decrypt(key, &self.get_encrypted_value())
+    }
 }
 
-pub enum EncryptionAlgorithm {
+pub enum Algorithm {
     TripleDES,
     AES128,
     AES256,
@@ -14,7 +20,7 @@ pub enum EncryptionAlgorithm {
     AES192GCM,
     AES256GCM,
 }
-impl TryFrom<&str> for EncryptionAlgorithm {
+impl TryFrom<&str> for Algorithm {
     type Error = &'static str;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
@@ -40,6 +46,29 @@ impl TryFrom<&str> for EncryptionAlgorithm {
 
 }*/
 
+impl Algorithm {
+    pub fn decrypt(&self, key: &str, ciphertext: &[u8]) -> Vec<u8> {
+        match self {
+            Algorithm::TripleDES => todo!(),
+            Algorithm::AES128 => todo!(),
+            Algorithm::AES256 => {
+                use aes::Aes256;
+                use block_modes::block_padding::Pkcs7;
+                use block_modes::{BlockMode, Cbc};
+                type Aes256Cbc = Cbc<Aes256, Pkcs7>;
+                let iv = &ciphertext[..16];
+                let ciphertext = &ciphertext[16..];
+                let cipher = Aes256Cbc::new_from_slices(key.as_bytes(), &iv).unwrap();
+                cipher.decrypt_vec(ciphertext).unwrap()
+            }
+            Algorithm::AES128GCM => todo!(),
+            Algorithm::AES192 => todo!(),
+            Algorithm::AES192GCM => todo!(),
+            Algorithm::AES256GCM => todo!(),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct Encryption {
     pub profile: String,
@@ -59,8 +88,8 @@ impl Key for ContentKey {
         base64::decode(&self.encrypted_value).unwrap()
     }
 
-    fn get_encryption_algorithm(&self) -> EncryptionAlgorithm {
-        EncryptionAlgorithm::try_from(self.algorithm.as_str()).unwrap()
+    fn get_encryption_algorithm(&self) -> Algorithm {
+        Algorithm::try_from(self.algorithm.as_str()).unwrap()
     }
 }
 
@@ -76,7 +105,7 @@ impl Key for UserKey {
         base64::decode(&self.key_check).unwrap()
     }
 
-    fn get_encryption_algorithm(&self) -> EncryptionAlgorithm {
-        EncryptionAlgorithm::try_from(self.algorithm.as_str()).unwrap()
+    fn get_encryption_algorithm(&self) -> Algorithm {
+        Algorithm::try_from(self.algorithm.as_str()).unwrap()
     }
 }
