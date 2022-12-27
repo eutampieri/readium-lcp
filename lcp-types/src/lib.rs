@@ -1,12 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 pub mod crypto;
+pub mod encryption_manifest;
 pub mod link;
 pub mod rights;
 pub mod signature;
 pub mod user;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LicenseDocument {
     pub id: String,
     pub issued: chrono::DateTime<chrono::Utc>,

@@ -25,7 +25,7 @@ impl From<&str> for LinkRelationship {
     }
 }
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 #[serde(default)]
 pub struct Link {
     pub href: String,

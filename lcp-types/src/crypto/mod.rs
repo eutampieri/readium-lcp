@@ -5,7 +5,7 @@ mod tripledes;
 pub trait Key {
     fn get_encrypted_value(&self) -> Vec<u8>;
     fn get_encryption_algorithm(&self) -> Algorithm;
-    fn decrypt(&self, key: &str) -> Vec<u8> {
+    fn decrypt(&self, key: &[u8]) -> Vec<u8> {
         self.get_encryption_algorithm()
             .decrypt(key, &self.get_encrypted_value())
     }
@@ -47,18 +47,18 @@ impl TryFrom<&str> for Algorithm {
 }*/
 
 impl Algorithm {
-    pub fn decrypt(&self, key: &str, ciphertext: &[u8]) -> Vec<u8> {
+    pub fn decrypt(&self, key: &[u8], ciphertext: &[u8]) -> Vec<u8> {
         match self {
             Algorithm::TripleDES => todo!(),
             Algorithm::AES128 => todo!(),
             Algorithm::AES256 => {
                 use aes::Aes256;
-                use block_modes::block_padding::Pkcs7;
+                use block_modes::block_padding::ZeroPadding;
                 use block_modes::{BlockMode, Cbc};
-                type Aes256Cbc = Cbc<Aes256, Pkcs7>;
+                type Aes256Cbc = Cbc<Aes256, ZeroPadding>;
                 let iv = &ciphertext[..16];
                 let ciphertext = &ciphertext[16..];
-                let cipher = Aes256Cbc::new_from_slices(key.as_bytes(), &iv).unwrap();
+                let cipher = Aes256Cbc::new_from_slices(key, &iv).unwrap();
                 cipher.decrypt_vec(ciphertext).unwrap()
             }
             Algorithm::AES128GCM => todo!(),
@@ -69,7 +69,7 @@ impl Algorithm {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Encryption {
     pub profile: String,
     /// The Content Key (encrypted using the User Key) is used to encrypt the Publication Resources
@@ -77,7 +77,7 @@ pub struct Encryption {
     pub user_key: UserKey,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ContentKey {
     encrypted_value: String,
     algorithm: String,
@@ -93,7 +93,7 @@ impl Key for ContentKey {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct UserKey {
     key_check: String,
     algorithm: String,

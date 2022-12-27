@@ -13,3 +13,5 @@ serde_json = "1.0"
 ureq = "2"
 zip = "0.5"
 lcp-types = {path = "../lcp-types"}
+hex-literal = "0.3"
+inflate = "0.4"
